@@ -6,6 +6,14 @@ A sample application to show the localization features of Kraken
 
 Starting with a [plain vanilla](https://github.com/lensam69/Kraken_Example_Localization/commit/281da0b8260fe4d47ef52252cf89e43b87c7bc1c) application, we're going to set up content bundles to greet the customer in different (random) languages!
 
+## Running this example
+
+Clone this repo: `git clone https://github.com/lensam69/Kraken_Example_Localization.git`
+
+Install the dependencies: `npm install`
+
+Start the server: `npm start`
+
 ## Relevant code
 
 ### Logic
