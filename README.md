@@ -1,6 +1,7 @@
 # Kraken_Localization
 
 A sample application to show the localization features of Kraken
+If you'd like to see a non-trivial application, check out [a shopping cart built on kraken](https://github.com/lmarkus/Kraken_Example_Shopping_Cart/)
 
 ## What we'll be doing
 
