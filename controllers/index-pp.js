@@ -13,10 +13,12 @@ module.exports = function (server) {
                          { language: 'es', country: 'ES'},
                          { language: 'tlh', country: 'US'}];
 
-        // a simple locale determination mechanism
-        // 1. fully match both language and country
-        // 2. match language part only
-        // 3. assume the languages[0] being the default if no match
+        // Paypal style locale determination mechanism
+        // 1. determine user country preference to direct user
+        //    correspondingly.  Assume US as default country if not found
+        // 2. match user language only against language part (only) in
+        //    supported languages
+        // 3. assume the default language of the determined country
         // Note that this is only for demo purpose
         // real-world determination mechanism shall be more sophticated
         // TODO: case insensitive matching
@@ -29,28 +31,27 @@ module.exports = function (server) {
 
         var model = { name: 'kraken-localization'};
 
-        for (var i = 0; i < req.acceptedLanguages.length; i ++) {
-            var c = req.acceptedLanguages[i].indexOf('-');
-            if (c !== -1) {
-                // language contain a '-'
-                for (var j = 0; j < languages.length; j++) {
-                    if (req.acceptedLanguages[i].substring(0, c) ===
-                        languages[j].language &&
-                        req.acceptedLanguages[i].substring(c + 1) ===
-                        languages[j].country) {
-                        selectedLanguage = languages[j];
-                        model.lang = req.acceptedLanguages[i];
-                    }
-                }
-            }
+        // Note: for demo purpose, use only the first accept-language
+        // value to determine country.  In real-world determination
+        // shall be done using IP, geo-location, cookie, etc. 
+
+        var selectedCountry = 'US';
+        var c = req.acceptedLanguages[0].indexOf('-');
+        if (c !== -1) {
+            selectedCountry = req.acceptedLanguages[i].substring(c + 1);
         }
 
-        if (selectedLanguage === '') {
-            for (var k = 0; k < languages.length; k++) {
-                if (req.acceptedLanguages[i] ===
-                    languages[k].language) {
-                    selectedLanguage = languages[k];
-                    model.lang = req.acceptedLanguages[i];
+        for (var i = 0; i < req.acceptedLanguages.length; i ++) {
+            var lang = req.acceptedLanguages[i];
+            c = lang.indexOf('-');
+            if (c !== -1) {
+                lang = lang.substring(0, c);
+            }
+            for (var j = 0; j < languages.length; j ++) {
+                if (languages[j].language === lang &&
+                    languages[j].country === selectedCountry) {
+                    selectedLanguage = languages[j];
+                    model.lang = lang;
                 }
             }
         }
